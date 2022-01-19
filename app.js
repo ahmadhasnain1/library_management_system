@@ -34,6 +34,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
 
+app.get('/', (req, res) => {
+	res.send('Hello World!')
+  });
+
 app.use('/user',userRoutes);
 app.use('/admin',adminRoutes);
 app.use('/book',bookRoutes);
