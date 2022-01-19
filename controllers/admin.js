@@ -29,6 +29,15 @@ const login = async(req, res) => {
         res.status(400).send("Invalid Credentials");
 }
 
+const logout = async(req, res) => {
+  const token =
+    req.body.token || req.query.token || req.headers["x-access-token"];
+    const admin = await AdminModel.findOne({ token });
+    admin.token = null;
+    res.status(200).json({"message":"logged out successfully."});
+
+}
+
 const update = async(req, res) => {
   try{
       let object = {};
@@ -54,5 +63,6 @@ const update = async(req, res) => {
 
 module.exports = {
     login,
+    logout,
     update
 };

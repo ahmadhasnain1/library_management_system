@@ -27,6 +27,15 @@ const login = async(req, res) => {
        res.status(400).send("Invalid Credentials");
 }
 
+const logout = async(req, res) => {
+  const token =
+    req.body.token || req.query.token || req.headers["x-access-token"];
+    const user = await UserModel.findOne({ token });
+    user.token = null;
+    res.status(200).json({"message":"logged out successfully."});
+
+}
+
 const getAllUsers = async(req, res) => {
     try{
         users = await UserModel.findAll({
@@ -138,6 +147,7 @@ const getAllUsers = async(req, res) => {
 
   module.exports = {
     login,
+    logout,
     getAllUsers,
     getUser,
     createUser,

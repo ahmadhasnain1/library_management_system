@@ -2,6 +2,8 @@ const express = require('express');
 const swaggerUI = require("swagger-ui-express");
 const swaggerJsDoc = require("swagger-jsdoc");
 var userRoutes = require('./routes/user');
+var adminRoutes = require('./routes/admin');
+var bookRoutes = require('./routes/book');
 
 const options = {
 	definition: {
@@ -30,12 +32,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
 
-
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-});
-
 app.use('/user',userRoutes);
+app.use('/admin',adminRoutes);
+app.use('/book',bookRoutes);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}!`)

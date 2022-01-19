@@ -19,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'libraryId',
         as: 'libraryBooks',
       });
+      Library.belongsToMany(models.User, { through: 'LibraryUsers' });
     }
   }
   Library.init({
