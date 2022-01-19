@@ -4,6 +4,8 @@ const swaggerJsDoc = require("swagger-jsdoc");
 var userRoutes = require('./routes/user');
 var adminRoutes = require('./routes/admin');
 var bookRoutes = require('./routes/book');
+const dotenv = require('dotenv');
+dotenv.config();
 
 const options = {
 	definition: {
@@ -25,7 +27,7 @@ const options = {
 const specs = swaggerJsDoc(options);
 
 const app = express();
-const port = 8000;
+const port = process.env.PORT;
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

@@ -17,7 +17,10 @@
   },
   "homepage": "https://github.com/ahmadhasnain1/library_management_system#readme",
   "dependencies": {
+    "bcrypt": "^5.0.1",
+    "dotenv": "^14.2.0",
     "express": "^4.17.2",
+    "jsonwebtoken": "^8.5.1",
     "pg": "^8.7.1",
     "sequelize": "^6.13.0",
     "swagger-jsdoc": "^6.1.0",

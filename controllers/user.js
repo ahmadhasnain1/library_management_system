@@ -2,37 +2,55 @@ const UserModel = require('../models').User;
 const BookModel = require('../models').Book;
 
 const login = async(req, res) => {
-    // get admin from database
-    email = req.body.email;
-    const user = await UserModel.findOne({ email });
+  try{
+      // get admin from database
+      email = req.body.email;
+      const user = await UserModel.findOne({ email });
 
-    // check admin found and verify password
-   if (user && await(bcrypt.compareSync(req.body.password, user.password))) {
-        // authentication failed
-        const token = jwt.sign(
-           { user: user.id, email },
-           process.env.TOKEN_KEY,
-           {
-             expiresIn: "2h",
-           }
-         );
-   
-         // save user token
-         user.token = token;
-   
-         // user
-         res.status(200).json(user);
-   }
-   else
-       res.status(400).send("Invalid Credentials");
+      // check admin found and verify password
+    if (user && await(bcrypt.compareSync(req.body.password, user.password))) {
+          // authentication failed
+          const token = jwt.sign(
+            { user: user.id, email },
+            process.env.TOKEN_KEY,
+            {
+              expiresIn: "2h",
+            }
+          );
+    
+          // save user token
+          user.token = token;
+    
+          // user
+          res.status(200).json(user);
+    }
+    else
+        res.status(400).send("Invalid Credentials");
+  }
+  catch(e){
+    if(!e.status) {
+      res.status(500).json( { error: { code: 'UNKNOWN_ERROR', message: 'An unknown error occurred.' } });
+    } else {
+        res.status(e.status).json( { error: { code: e.code, message: e.message } });
+    }
+  }
 }
 
 const logout = async(req, res) => {
-  const token =
+  try{
+    const token =
     req.body.token || req.query.token || req.headers["x-access-token"];
     const user = await UserModel.findOne({ token });
     user.token = null;
     res.status(200).json({"message":"logged out successfully."});
+  }
+  catch(e){
+    if(!e.status) {
+      res.status(500).json( { error: { code: 'UNKNOWN_ERROR', message: 'An unknown error occurred.' } });
+    } else {
+        res.status(e.status).json( { error: { code: e.code, message: e.message } });
+    }
+  }
 
 }
 
