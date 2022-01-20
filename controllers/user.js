@@ -25,7 +25,7 @@ const login = async(req, res) => {
           user.update({
             token: token
           });    
-          res.status(200).json(user);
+          res.status(200).json({"user":user});
     }
     else
         res.status(400).send("Invalid Credentials");
