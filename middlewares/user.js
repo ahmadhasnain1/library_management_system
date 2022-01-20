@@ -77,6 +77,23 @@ const validateUserCreate = (req, res, next) => {
     }
   }
 
+  const validateUserGetAll = (req, res, next) => {
+    try{
+        const schema = Joi.object().keys({
+          library_id: Joi.integer().required()
+        });
+        const result = schema.validate(req.body); 
+        if(result.error == null)  //means valid
+          next();
+        else
+          return res.status(400).json({
+          success: false,
+          msg: result.error.details.map(i => i.message).join(',')})
+    } catch(e){
+        res.status(500).json({error:e.message})
+    }
+  }
+
   const validateUserEmail = (req, res, next) => {
     try{
         if(req.body.email!=null){
@@ -116,6 +133,19 @@ const validateUserCreate = (req, res, next) => {
     }
   }
 
+  const checkUserBelongsToLibrary = (req, res, next) => {
+    try{
+      user = req.library.getUsers({where:{
+        id:req.body.user_id
+      }});
+      if(user)
+        return next()
+      return res.status(400).json( { error: "User does not belongs to library." });
+    } catch(e){
+      res.status(500).json({error:e.message})
+    }
+  }
+
   module.exports = {
       validateUserCreate,
       validateUserUpdate,
@@ -123,5 +153,6 @@ const validateUserCreate = (req, res, next) => {
       validateUserLogin,
       validateUserEmail,
       validateUserExistance,
-      validateLibraryExistance
+      validateLibraryExistance,
+      validateUserGetAll
   }

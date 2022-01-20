@@ -62,10 +62,72 @@ const validateBookCreate = (req, res, next) => {
     }
   }
 
+  const validateBookGetAll = (req, res, next) => {
+    try{
+        const schema = Joi.object().keys({
+          library_id: Joi.integer().required()
+        });
+        const result = schema.validate(req.body); 
+        if(result.error == null)  //means valid
+          next();
+        else
+          return res.status(400).json({
+          success: false,
+          msg: result.error.details.map(i => i.message).join(',')})
+    } catch(e){
+        res.status(500).json({error:e.message})
+    }
+  }
+
+  const validateBookBorrow = (req, res, next) => {
+    try{
+        const schema = Joi.object().keys({
+          book_id: Joi.integer().required(),
+          library_id: Joi.integer().required(),
+          user_id: Joi.integer().required()
+        });
+        const result = schema.validate(req.body); 
+        if(result.error == null)  //means valid
+          next();
+        else
+          return res.status(400).json({
+          success: false,
+          msg: result.error.details.map(i => i.message).join(',')})
+    } catch(e){
+        res.status(500).json({error:e.message})
+    }
+  }
+
+  const validateBookReturn = (req, res, next) => {
+    try{
+        const schema = Joi.object().keys({
+          book_id: Joi.integer().required(),
+          library_id: Joi.integer().required(),
+          user_id: Joi.integer().required()
+        });
+        const result = schema.validate(req.body); 
+        if(result.error == null)  //means valid
+          next();
+        else
+          return res.status(400).json({
+          success: false,
+          msg: result.error.details.map(i => i.message).join(',')})
+    } catch(e){
+        res.status(500).json({error:e.message})
+    }
+  }
+
 
  const validateBookExistance = (req, res, next) => {
     try{
-        let book = BookModel.findOne({id:req.body.book_id});
+        let book = BookModel.findOne({
+          where:{
+            [Op.and]: [
+              {libraryId: req.body.library_id },
+              {id:req.body.book_id}
+            ]
+          }
+        });
         if(book){
             req.book = book;
             return next();
@@ -88,7 +150,7 @@ const validateBookCreate = (req, res, next) => {
         }
       });
       if(book){
-        return res.status(400).json( { error: "Book already exists inthis library." });
+        return res.status(400).json( { error: "Book already exists in this library." });
       }
       next();
   } catch(e){
@@ -102,5 +164,8 @@ const validateBookCreate = (req, res, next) => {
     validateBookExistance,
     validateBookUpdate,
     validateBookDelete,
-    checkBookExistanceInLibrary
+    checkBookExistanceInLibrary,
+    validateBookBorrow,
+    validateBookReturn,
+    validateBookGetAll
 }

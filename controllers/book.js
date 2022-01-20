@@ -4,12 +4,8 @@ const BookModel = require('../models').Book;
 
 const getAllBooks = async(req, res) => {
     try{
-        books = await BookModel.findAll({
-            include: [{
-              model: UserModel,
-            }],
-          });
-        res.send(books);
+        books = await req.library.getBooks();        
+        res.staus(200).json({books:books});
     } catch(e){
       res.status(500).json({error:e.message})
     }
@@ -17,7 +13,7 @@ const getAllBooks = async(req, res) => {
   
   const getBook = async(req, res) => {
     try{
-        const book = await UserModel.findOne({
+        const book = await BookModel.findOne({
           where: {
             id: req.params.book_id
           }
@@ -26,7 +22,7 @@ const getAllBooks = async(req, res) => {
           res.status(404).json({ "error":'book not found against that id'});
         }
         else
-          res.send(book);
+          res.status(200).json({book:book});
     } catch(e){
       res.status(500).json({error:e.message})
     }

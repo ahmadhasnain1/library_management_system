@@ -50,13 +50,8 @@ const logout = async(req, res) => {
 
 const getAllUsers = async(req, res) => {
     try{
-        users = await UserModel.findAll({
-            include: [{
-              model: BookModel,
-              as: 'userBooks',
-            }],
-          });
-        res.send(users);
+        let users = req.library.getUsers();        
+        res.status(200).json({users:users});
     } catch(e){
       res.status(500).json({error:e.message})
     }
@@ -73,7 +68,7 @@ const getAllUsers = async(req, res) => {
           res.status(404).json({ "error":'user not found against that id'});
         }
         else
-          res.send(user);
+          res.status(200).json({user:user});
     } catch(e){
       res.status(500).json({error:e.message})
     }

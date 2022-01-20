@@ -41,7 +41,7 @@ const validateAdminLogin = (req, res, next) => {
   const validateAdminExistance = (req, res, next) => {
     try{
         let admin = AdminModel.findOne({id:req.body.admin_id});
-        if(admin){
+        if(admin && req.user.id==req.body.admin_id){
             return next();
         }
         return res.status(400).json( { error: "Admin does not exist with that id." });
