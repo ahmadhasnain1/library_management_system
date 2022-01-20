@@ -76,10 +76,31 @@ const validateBookCreate = (req, res, next) => {
     }
   }
 
+  const checkBookExistanceInLibrary = (req, res, next) => {
+    try{
+      let book = BookModel.findOne({
+        where: {
+          [Op.and]: [
+            { libraryId: req.body.library_id },
+            { name: req.body.name },
+            {author: req.body.author}
+          ]
+        }
+      });
+      if(book){
+        return res.status(400).json( { error: "Book already exists inthis library." });
+      }
+      next();
+  } catch(e){
+      res.status(500).json({error:e.message})
+  }
+  }
+
 
   module.exports = {
     validateBookCreate,
     validateBookExistance,
     validateBookUpdate,
-    validateBookDelete
+    validateBookDelete,
+    checkBookExistanceInLibrary
 }

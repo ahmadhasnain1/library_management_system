@@ -69,7 +69,8 @@ module.exports = (sequelize, DataTypes) => {
     description: DataTypes.STRING,
     is_available: DataTypes.BOOLEAN,
     libraryId: DataTypes.INTEGER,
-    userId: DataTypes.INTEGER
+    userId: DataTypes.INTEGER,
+    publishing_date: DataTypes.DATE
   }, {
     sequelize,
     modelName: 'Book',
