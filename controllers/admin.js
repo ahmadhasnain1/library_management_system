@@ -29,15 +29,9 @@ const login = async(req, res) => {
         }
         else
             res.status(400).send("Invalid Credentials");
-      }
-      catch(e){
-        if(!e.status) {
-          res.status(500).json( { error: { code: 'UNKNOWN_ERROR', message: 'An unknown error occurred.' } });
-        } else {
-            res.status(e.status).json( { error: { code: e.code, message: e.message } });
-        }
-      }
-
+    } catch(e){
+        res.status(500).json({error:e.message})
+    }
 }
 
 const logout = async(req, res) => {
@@ -47,13 +41,8 @@ const logout = async(req, res) => {
     const admin = await AdminModel.findOne({ token });
     admin.token = null;
     res.status(200).json({"message":"logged out successfully."});
-  }
-  catch(e){
-    if(!e.status) {
-      res.status(500).json( { error: { code: 'UNKNOWN_ERROR', message: 'An unknown error occurred.' } });
-    } else {
-        res.status(e.status).json( { error: { code: e.code, message: e.message } });
-    }
+  } catch(e){
+    res.status(500).json({error:e.message})
   }
 
 }
@@ -71,13 +60,8 @@ const update = async(req, res) => {
         }
       });
       res.send('Admin info updated successfully');
-  }
-  catch(e){
-      if(!e.status) {
-        res.status(500).json( { error: { code: 'UNKNOWN_ERROR', message: 'An unknown error occurred.' } });
-      } else {
-          res.status(e.status).json( { error: { code: e.code, message: e.message } });
-      }
+  } catch(e){
+    res.status(500).json({error:e.message})
   }
 }
 

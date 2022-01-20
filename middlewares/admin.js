@@ -13,13 +13,8 @@ const validateAdminLogin = (req, res, next) => {
           return res.status(400).json({
           success: false,
           msg: result.error.details.map(i => i.message).join(',')})
-    }
-    catch(e){
-        if(!e.status) {
-          res.status(500).json( { error: { code: 'UNKNOWN_ERROR', message: 'An unknown error occurred.' } });
-        } else {
-            res.status(e.status).json( { error: { code: e.code, message: e.message } });
-        }
+    } catch(e){
+        res.status(500).json({error:e.message})
     }
   }
 
@@ -37,13 +32,8 @@ const validateAdminLogin = (req, res, next) => {
           return res.status(400).json({
           success: false,
           msg: result.error.details.map(i => i.message).join(',')})
-    }
-    catch(e){
-        if(!e.status) {
-          res.status(500).json( { error: { code: 'UNKNOWN_ERROR', message: 'An unknown error occurred.' } });
-        } else {
-            res.status(e.status).json( { error: { code: e.code, message: e.message } });
-        }
+    } catch(e){
+        res.status(500).json({error:e.message})
     }
   }
 

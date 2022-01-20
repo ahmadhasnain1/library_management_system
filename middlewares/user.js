@@ -14,15 +14,10 @@ const validateUserLogin = (req, res, next) => {
           return res.status(400).json({
           success: false,
           msg: result.error.details.map(i => i.message).join(',')})
+    } catch(e){
+        res.status(500).json({error:e.message})
     }
-    catch(e){
-        if(!e.status) {
-          res.status(500).json( { error: { code: 'UNKNOWN_ERROR', message: 'An unknown error occurred.' } });
-        } else {
-            res.status(e.status).json( { error: { code: e.code, message: e.message } });
-        }
-    }
-  }
+}
 
 const validateUserCreate = (req, res, next) => {
     try{
@@ -38,15 +33,10 @@ const validateUserCreate = (req, res, next) => {
           return res.status(400).json({
           success: false,
           msg: result.error.details.map(i => i.message).join(',')})
+    } catch(e){
+        res.status(500).json({error:e.message})
     }
-    catch(e){
-        if(!e.status) {
-          res.status(500).json( { error: { code: 'UNKNOWN_ERROR', message: 'An unknown error occurred.' } });
-        } else {
-            res.status(e.status).json( { error: { code: e.code, message: e.message } });
-        }
-    }
-  }
+}
 
   const validateUserUpdate = (req, res, next) => {
     try{
@@ -62,13 +52,8 @@ const validateUserCreate = (req, res, next) => {
           return res.status(400).json({
           success: false,
           msg: result.error.details.map(i => i.message).join(',')})
-    }
-    catch(e){
-        if(!e.status) {
-          res.status(500).json( { error: { code: 'UNKNOWN_ERROR', message: 'An unknown error occurred.' } });
-        } else {
-            res.status(e.status).json( { error: { code: e.code, message: e.message } });
-        }
+    } catch(e){
+        res.status(500).json({error:e.message})
     }
   }
 
@@ -84,24 +69,23 @@ const validateUserCreate = (req, res, next) => {
           return res.status(400).json({
           success: false,
           msg: result.error.details.map(i => i.message).join(',')})
-    }
-    catch(e){
-        if(!e.status) {
-          res.status(500).json( { error: { code: 'UNKNOWN_ERROR', message: 'An unknown error occurred.' } });
-        } else {
-            res.status(e.status).json( { error: { code: e.code, message: e.message } });
-        }
+    } catch(e){
+        res.status(500).json({error:e.message})
     }
   }
 
   const validateUserExistance = (req, res, next) => {
-    if(req.body.email!=null){
-        let user = UserModel.findOne({email:req.body.email});
-        if(user){
-            return res.status(400).json( { error: "User with that email already exists" });
+    try{
+        if(req.body.email!=null){
+            let user = UserModel.findOne({email:req.body.email});
+            if(user){
+                return res.status(400).json( { error: "User with that email already exists" });
+            }
         }
+        next();
+    } catch(e){
+        res.status(500).json({error:e.message})
     }
-    next();
   }
 
   module.exports = {

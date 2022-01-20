@@ -10,13 +10,8 @@ const getAllBooks = async(req, res) => {
             }],
           });
         res.send(books);
-    }
-    catch(e){
-        if(!e.status) {
-          res.status(500).json( { error: { code: 'UNKNOWN_ERROR', message: 'An unknown error occurred.' } });
-        } else {
-            res.status(e.status).json( { error: { code: e.code, message: e.message } });
-        }
+    } catch(e){
+      res.status(500).json({error:e.message})
     }
   }
   
@@ -32,13 +27,8 @@ const getAllBooks = async(req, res) => {
         }
         else
           res.send(book);
-    }
-    catch(e){
-        if(!e.status) {
-          res.status(500).json( { error: { code: 'UNKNOWN_ERROR', message: 'An unknown error occurred.' } });
-        } else {
-            res.status(e.status).json( { error: { code: e.code, message: e.message } });
-        }
+    } catch(e){
+      res.status(500).json({error:e.message})
     }
   }
   
@@ -53,19 +43,8 @@ const getAllBooks = async(req, res) => {
           is_available: true
         })
         res.status(201).send(book);
-    }
-    catch(e){
-        if (e.name === 'SequelizeValidationError') {
-          return res.status(400).json({
-            success: false,
-            msg: e.errors.map(err => err.message)
-          })
-        }
-        else if(!e.status) {
-          res.status(500).json( { error: { code: 'UNKNOWN_ERROR', message: 'An unknown error occurred.' } });
-        } else {
-            res.status(e.status).json( { error: { code: e.code, message: e.message } });
-        }
+    } catch(e){
+      res.status(500).json({error:e.message})
     }
   }
   
@@ -83,13 +62,8 @@ const getAllBooks = async(req, res) => {
           }
         });
         res.send('Book updated successfully');
-    }
-    catch(e){
-        if(!e.status) {
-          res.status(500).json( { error: { code: 'UNKNOWN_ERROR', message: 'An unknown error occurred.' } });
-        } else {
-            res.status(e.status).json( { error: { code: e.code, message: e.message } });
-        }
+    } catch(e){
+      res.status(500).json({error:e.message})
     }
   }
   
@@ -101,13 +75,8 @@ const getAllBooks = async(req, res) => {
           }
         });
         res.send('Book deleted successfully');
-    }
-    catch(e){
-        if(!e.status) {
-          res.status(500).json( { error: { code: 'UNKNOWN_ERROR', message: 'An unknown error occurred.' } });
-        } else {
-            res.status(e.status).json( { error: { code: e.code, message: e.message } });
-        }
+    } catch(e){
+      res.status(500).json({error:e.message})
     }
   }
 
