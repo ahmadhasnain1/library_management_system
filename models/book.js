@@ -22,8 +22,50 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Book.init({
-    name: DataTypes.STRING,
-    author: DataTypes.STRING,
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+          is: ["^[a-z]+$",'i'],
+          isAlpha: {
+            args:true,
+            msg: "name only contain alphabets"
+          },
+          notNull: true,
+          notEmpty: true,
+          min: 2,
+          max: 30
+      },
+      get() {   //getter
+        const rawValue = this.getDataValue('name');
+        return rawValue ? rawValue.charAt(0).toUpperCase() + rawValue.slice(1) : null;
+      },
+      set(value) {  
+        this.setDataValue('name', value.toLowerCase());
+      }
+    },
+    author: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+          is: ["^[a-z]+$",'i'],
+          isAlpha: {
+            args:true,
+            msg: "author name only contain alphabets"
+          },
+          notNull: true,
+          notEmpty: true,
+          min: 2,
+          max: 30
+      },
+      get() {   //getter
+        const rawValue = this.getDataValue('author');
+        return rawValue ? rawValue.charAt(0).toUpperCase() + rawValue.slice(1) : null;
+      },
+      set(value) {  
+        this.setDataValue('author', value.toLowerCase());
+      }
+    },
     description: DataTypes.STRING,
     is_available: DataTypes.BOOLEAN,
     libraryId: DataTypes.INTEGER,

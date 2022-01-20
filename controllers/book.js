@@ -39,7 +39,8 @@ const getAllBooks = async(req, res) => {
           author: req.body.author,
           description: req.body.description,
           libraryId: req.body.library_id,
-          userId: req.body.user_id,
+          publishing_date: req.body.publishing_date,
+          userId: null,
           is_available: true
         })
         res.status(201).send(book);
@@ -54,8 +55,8 @@ const getAllBooks = async(req, res) => {
         if(req.body.name!=null)  object.name = req.body.name;
         if(req.body.author!=null)  object.author = req.body.author;
         if(req.body.description!=null)  object.description = req.body.description;
-        if(req.body.is_available!=null)  object.is_available = req.body.is_available;
-        console.log(object);
+        if(req.body.publishing_date!=null) object.publishing_date = req.body.publishing_date;
+
         BookModel.update(object,{
           where: {
             id: req.body.book_id
@@ -80,10 +81,39 @@ const getAllBooks = async(req, res) => {
     }
   }
 
+  const borrowBook = async(req, res) => {
+    try{
+      BookModel.update({userId:req.user.id},{
+        where: {
+          id: req.body.book_id
+        }
+      });
+      res.send('Book borrowed successfully');
+    } catch(e){
+      res.status(500).json({error:e.message})
+    }
+  }
+
+  const returnBook = async(req, res) => {
+    try{
+      BookModel.update({userId:null},{
+        where: {
+          id: req.body.book_id
+        }
+      });
+      res.send('Book returned successfully');
+    } catch(e){
+      res.status(500).json({error:e.message})
+    }
+  }
+
+
   module.exports = {
     getAllBooks,
     getBook,
     addBook,
     deleteBook,
-    updateBook
+    updateBook,
+    borrowBook,
+    returnBook
 };

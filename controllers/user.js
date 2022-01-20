@@ -1,7 +1,9 @@
 const UserModel = require('../models').User;
 const BookModel = require('../models').Book;
+const LibraryModel = require('../models').Library;
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
+const emailJob = require('../jobs/sendEmail');
 
 const login = async(req, res) => {
   try{
@@ -84,7 +86,14 @@ const getAllUsers = async(req, res) => {
           email: req.body.email,
           password: req.body.password,
           token: null
-        })
+        });
+        library = LibraryModel.findOne({
+          where: {
+            id: req.body.library_id
+          }
+        });
+        library.addUser(user);
+        emailJob.scheduleEmail(req.body.email, req.user.email);
         res.status(201).send(user);
     } catch(e){
       res.status(500).json({error:e.message})
@@ -116,6 +125,12 @@ const getAllUsers = async(req, res) => {
             id: req.body.user_id
           }
         });
+        library = LibraryModel.findOne({
+          where: {
+            id: req.body.library_id
+          }
+        });
+        library.removeUser(user);
         res.send('User deleted successfully');
     } catch(e){
       res.status(500).json({error:e.message})

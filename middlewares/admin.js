@@ -1,4 +1,5 @@
 const Joi = require('joi');
+const AdminModel = require('../models').Admin ;
 
 const validateAdminLogin = (req, res, next) => {
     try{
@@ -37,8 +38,43 @@ const validateAdminLogin = (req, res, next) => {
     }
   }
 
+  const validateAdminExistance = (req, res, next) => {
+    try{
+        let admin = AdminModel.findOne({id:req.body.admin_id});
+        if(admin){
+            return next();
+        }
+        return res.status(400).json( { error: "Admin does not exist with that id." });
+    } catch(e){
+        res.status(500).json({error:e.message})
+    }
+  }
+
+  const checkAdmin = (req, res, next) => {
+    try{
+      let admin = AdminModel.findOne({id:req.user.id});
+      if(admin)
+        return next()
+      return res.status(403).json( { error: "You donot have permission." });
+    } catch(e){
+        res.status(500).json({error:e.message})
+    }
+  }
+
+  const checkAdminBelongsToLibrary = (req, res, next) => {
+    try{
+        if(req.user.library_id==req.library_id)
+          return next()
+        return res.status(403).json( { error: "You donot have permission." });
+      } catch(e){
+          res.status(500).json({error:e.message})
+      }
+  }
 
   module.exports = {
       validateAdminLogin,
-      validateAdminUpdate
+      validateAdminUpdate,
+      validateAdminExistance,
+      checkAdmin,
+      checkAdminBelongsToLibrary
   }
