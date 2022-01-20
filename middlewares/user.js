@@ -1,4 +1,5 @@
 const Joi = require('joi');
+const UserModel = require('../models').User;
 
 const validateUserLogin = (req, res, next) => {
     try{
@@ -93,9 +94,20 @@ const validateUserCreate = (req, res, next) => {
     }
   }
 
+  const validateUserExistance = (req, res, next) => {
+    if(req.body.email!=null){
+        let user = UserModel.findOne({email:req.body.email});
+        if(user){
+            return res.status(400).json( { error: "User with that email already exists" });
+        }
+    }
+    next();
+  }
+
   module.exports = {
       validateUserCreate,
       validateUserUpdate,
       validateUserDelete,
-      validateUserLogin
+      validateUserLogin,
+      validateUserExistance
   }
