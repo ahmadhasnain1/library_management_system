@@ -15,7 +15,8 @@ module.exports = {
      await queryInterface.bulkInsert('Admins', [{
       full_name: 'Ahmad',
       email: 'ahmad.hasnain@invozone.com',
-      password: 'Abc123'
+      password: 'Abc123',
+      libraryId: 1
     }], {});
   },
 
