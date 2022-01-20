@@ -7,7 +7,6 @@ const getAllBooks = async(req, res) => {
         books = await BookModel.findAll({
             include: [{
               model: UserModel,
-              as: 'userBooks',
             }],
           });
         res.send(books);
@@ -49,6 +48,8 @@ const getAllBooks = async(req, res) => {
           name: req.body.name,
           author: req.body.author,
           description: req.body.description,
+          libraryId: req.body.library_id,
+          userId: req.body.user_id,
           is_available: true
         })
         res.status(201).send(book);

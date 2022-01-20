@@ -1,14 +1,14 @@
 {
   "development": {
-    "username": "ahmadhasnain",
-    "password": null,
+    "username": "ahmadhasnain2",
+    "password": 1234,
     "database": "lms",
     "host": "127.0.0.1",
     "port": 5432,
     "dialect": "postgres"
   },
   "test": {
-    "username": "ahmadhasnain",
+    "username": "ahmadhasnain2",
     "password": null,
     "database": "lms",
     "host": "127.0.0.1",

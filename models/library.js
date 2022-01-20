@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Library.hasOne(models.Admin, {
-        foreignKey: 'LibraryId',
+        foreignKey: 'libraryId',
         as: 'libraryAdmin',
       });
       Library.hasMany(models.Book, {
@@ -23,7 +23,16 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Library.init({
-    name: DataTypes.STRING
+    name: {
+      type: DataTypes.STRING,
+      get() {   //getter
+        const rawValue = this.getDataValue('name');
+        return rawValue ? rawValue.charAt(0).toUpperCase() + rawValue.slice(1) : null;
+      },
+      set(value) {  
+        this.setDataValue('name', value.toLowerCase());
+      }
+    }
   }, {
     sequelize,
     modelName: 'Library',

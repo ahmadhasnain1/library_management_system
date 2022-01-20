@@ -1,27 +1,30 @@
 const UserModel = require('../models').User;
 const BookModel = require('../models').Book;
+const bcrypt = require('bcrypt');
+const jwt = require("jsonwebtoken");
 
 const login = async(req, res) => {
   try{
-      // get admin from database
       email = req.body.email;
-      const user = await UserModel.findOne({ email });
-
-      // check admin found and verify password
-    if (user && await(bcrypt.compareSync(req.body.password, user.password))) {
-          // authentication failed
-          const token = jwt.sign(
+      const user = await UserModel.findOne({    // get user from database
+        include: [{
+          model: BookModel,
+          as: 'userBooks',
+        }],
+        where: {email}
+       });
+    if (user && await(bcrypt.compareSync(req.body.password, user.password))) {  // check user found and verify password
+          const token = jwt.sign(   // authentication successful
             { user: user.id, email },
             process.env.TOKEN_KEY,
             {
               expiresIn: "2h",
             }
           );
-    
-          // save user token
-          user.token = token;
-    
-          // user
+          user.token = token;   // save user token
+          user.update({
+            token: token
+          });    
           res.status(200).json(user);
     }
     else
@@ -98,8 +101,7 @@ const getAllUsers = async(req, res) => {
   const createUser = async(req, res) => {
     try{
        user = await UserModel.create({
-          firstName: req.body.first_name,
-          lastName: req.body.last_name,
+          full_name: req.body.full_name,
           email: req.body.email,
           password: req.body.password,
           token: null
@@ -124,8 +126,7 @@ const getAllUsers = async(req, res) => {
   const updateUser = async(req, res) => {
     try{
         let object = {};
-        if(req.body.firstName!=null)  object.firstName = req.body.firstName;
-        if(req.body.lastName!=null)  object.lastName = req.body.lastName;
+        if(req.body.full_name!=null)  object.full_name = req.body.full_name;
         if(req.body.email!=null)  object.email = req.body.email;
         if(req.body.password!=null)  object.password = req.body.password;
         console.log(object);

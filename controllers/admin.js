@@ -1,29 +1,30 @@
 const AdminModel = require('../models').Admin;
+const LibraryModel = require('../models').Library;
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 
 
 const login = async(req, res) => {
     try{
-        // get admin from database
         email = req.body.email;
-        const admin = await AdminModel.findOne({ email });
-
-        // check admin found and verify password
-        if (admin && await(bcrypt.compareSync(req.body.password, admin.password))) {
-            // authentication failed
-            const token = jwt.sign(
+        const admin = await AdminModel.findOne({   // get admin from database
+          include: [{
+            model: LibraryModel,
+          }],
+          email 
+        });
+        if (admin && await(bcrypt.compareSync(req.body.password, admin.password))) {   // check admin found and verify password
+            const token = jwt.sign(    // authentication successful
                 { admin_id: admin.id, email },
                 process.env.TOKEN_KEY,
                 {
                   expiresIn: "2h",
                 }
               );
-        
-              // save user token
-              admin.token = token;
-        
-              // user
+              admin.token = token;   // save admin token
+              admin.update({
+                token: token
+              });
               res.status(200).json(admin);
         }
         else
