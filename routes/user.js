@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router()
 var middleware = require('../middlewares/user');
-const userController = require('../controllers/user');
+const userController = require('../controllers/User');
 
 router.get('/', (req, res) => {
 	res.send('Hello World!')

@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router()
 var middleware = require('../middlewares/book');
-const bookController = require('../controllers/book');
+const bookController = require('../controllers/Book');
 
 router.post('/add', bookController.addBook);
 router.post('/remove', bookController.deleteBook);
