@@ -5,9 +5,7 @@ var tokenMiddleware = require('../middlewares/token');
 var adminMiddleware = require('../middlewares/admin');
 const userController = require('../controllers/User');
 
-router.get('/', (req, res) => {
-	res.send('Hello World!')
-  });
+
 router.post('/login', userMiddleware.validateUserLogin, userController.login);
 router.post('/add', tokenMiddleware.verifyToken, userMiddleware.validateUserCreate, adminMiddleware.checkAdmin, userMiddleware.validateLibraryExistance, adminMiddleware.checkAdminBelongsToLibrary, userMiddleware.validateUserEmail, userController.createUser);
 router.post('/remove', tokenMiddleware.verifyToken, userMiddleware.validateUserDelete, adminMiddleware.checkAdmin, userMiddleware.validateUserExistance, userMiddleware.validateLibraryExistance, adminMiddleware.checkAdminBelongsToLibrary, userController.deleteUser);

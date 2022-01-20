@@ -154,5 +154,6 @@ const validateUserCreate = (req, res, next) => {
       validateUserEmail,
       validateUserExistance,
       validateLibraryExistance,
-      validateUserGetAll
+      validateUserGetAll,
+      checkUserBelongsToLibrary
   }
