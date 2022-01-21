@@ -141,8 +141,45 @@ router.post('/add', tokenMiddleware.verifyToken, userMiddleware.validateUserCrea
  */
 router.post('/remove', tokenMiddleware.verifyToken, userMiddleware.validateUserDelete, adminMiddleware.checkAdmin, userMiddleware.validateUserExistance, userMiddleware.validateLibraryExistance, adminMiddleware.checkAdminBelongsToLibrary, userController.deleteUser);
 
-
-router.post('/update', tokenMiddleware.verifyToken, userMiddleware.validateUserUpdate, userMiddleware.validateUserExistance, userMiddleware.validateLibraryExistance, userController.updateUser);
+/**
+ * @swagger
+ * /create:
+ *   post:
+ *     summary: Update a user
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: full_name
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The user full name
+ *         name: email
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The user email
+ *         name: password
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The user password 
+ *         name: library_id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: The library id in which user exists
+ *     responses:
+ *       200:
+ *         description: The user information updated successfully
+ *         contents:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       400:
+ *         description: The user is already added with this email
+ */
+router.post('/update', tokenMiddleware.verifyToken, userMiddleware.validateUserUpdate, userMiddleware.validateUserEmail, userMiddleware.validateUserExistance, userMiddleware.validateLibraryExistance, userController.updateUser);
 
 
 /**

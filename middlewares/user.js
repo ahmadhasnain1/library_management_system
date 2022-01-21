@@ -45,7 +45,8 @@ const validateUserCreate = (req, res, next) => {
         const schema = Joi.object().keys({
           full_name: Joi.string().regex(/^[a-zA-Z]+$/).min(3).max(30).optional(),
           email: Joi.string().email().optional(),
-          password: Joi.string().min(5).max(30).optional()
+          password: Joi.string().min(5).max(30).optional(),
+          library_id: Joi.integer().required()
         });
         const result = schema.validate(req.body); 
         if(result.error == null)  //means valid
@@ -94,19 +95,19 @@ const validateUserCreate = (req, res, next) => {
     }
   }
 
-  // const validateUserEmail = (req, res, next) => {
-  //   try{
-  //       if(req.body.email!=null){
-  //           let user = UserModel.findOne({email:req.body.email});
-  //           if(user){
-  //               return res.status(400).json( { error: "User with that email already exists" });
-  //           }
-  //       }
-  //       next();
-  //   } catch(e){
-  //       res.status(500).json({error:e.message})
-  //   }
-  // }
+  const validateUserEmail = (req, res, next) => {
+    try{
+        if(req.body.email!=null){
+            let user = UserModel.findOne({email:req.body.email});
+            if(user){
+                return res.status(400).json( { error: "User with that email already exists" });
+            }
+        }
+        next();
+    } catch(e){
+        res.status(500).json({error:e.message})
+    }
+  }
 
   const validateLibraryExistance = (req, res, next) => {
     try{
@@ -151,7 +152,7 @@ const validateUserCreate = (req, res, next) => {
       validateUserUpdate,
       validateUserDelete,
       validateUserLogin,
-      // validateUserEmail,
+      validateUserEmail,
       validateUserExistance,
       validateLibraryExistance,
       validateUserGetAll,

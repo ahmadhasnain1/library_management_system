@@ -70,11 +70,24 @@ const validateAdminLogin = (req, res, next) => {
           res.status(500).json({error:e.message})
       }
   }
-
+  const validateAdminEmail = (req, res, next) => {
+    try{
+        if(req.body.email!=null){
+            let admin = AdminModel.findOne({email:req.body.email});
+            if(admin){
+                return res.status(400).json( { error: "Admin with that email already exists" });
+            }
+        }
+        next();
+    } catch(e){
+        res.status(500).json({error:e.message})
+    }
+  }
   module.exports = {
       validateAdminLogin,
       validateAdminUpdate,
       validateAdminExistance,
       checkAdmin,
-      checkAdminBelongsToLibrary
+      checkAdminBelongsToLibrary,
+      validateAdminEmail
   }
