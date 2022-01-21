@@ -115,4 +115,7 @@ router.post('/login', adminMiddleware.validateAdminLogin,  adminController.login
  */
 router.post('/update', tokenMiddleware.verifyToken, adminMiddleware.validateAdminUpdate, adminMiddleware.validateAdminEmail, adminMiddleware.validateAdminExistance, adminController.update);
 
+router.post('/logout',  tokenMiddleware.verifyToken,  adminController.logout);
+
+
 module.exports = router

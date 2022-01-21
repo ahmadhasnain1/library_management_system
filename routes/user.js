@@ -213,5 +213,6 @@ router.post('/update', tokenMiddleware.verifyToken, userMiddleware.validateUserU
 
 router.get('/getAll', tokenMiddleware.verifyToken, adminMiddleware.checkAdmin,  userMiddleware.validateLibraryExistance, adminMiddleware.checkAdminBelongsToLibrary, userController.getAllUsers);
 router.get('/getOne/:user_id',  tokenMiddleware.verifyToken, adminMiddleware.checkAdmin, userController.getUser);
+router.post('/logout',  tokenMiddleware.verifyToken,  userController.logout);
 
 module.exports = router
