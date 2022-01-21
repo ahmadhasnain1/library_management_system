@@ -28,7 +28,7 @@ const login = async(req, res) => {
               res.status(200).json({"admin":admin});
             }
         else
-            res.status(400).send("Invalid Credentials");
+            res.status(400).json({"error":"Invalid Credentials"});
     } catch(e){
         res.status(500).json({error:e.message})
     }
@@ -59,7 +59,7 @@ const update = async(req, res) => {
           id: req.body.admin_id
         }
       });
-      res.send('Admin info updated successfully');
+      res.status(200).json({"message":'Admin info updated successfully'});
   } catch(e){
     res.status(500).json({error:e.message})
   }
