@@ -4,8 +4,8 @@ const BookModel = require('../models').Book;
 
 const getAllBooks = async(req, res) => {
     try{
-        let books = await req.library.getBooks();        
-        res.staus(200).json({books:books});
+        let books = await req.library.getLibraryBooks();        
+        res.status(200).json({books:books});
     } catch(e){
       res.status(500).json({error:e.message})
     }
@@ -81,13 +81,13 @@ const getAllBooks = async(req, res) => {
     try{
       await BookModel.update({
         userId:req.user.id,
-        is_avaliable:false
+        is_available:false
       },{
         where: {
           id: req.body.book_id
         }
       });
-      res.send('Book borrowed successfully');
+      res.status(200).json({"message":'Book borrowed successfully'});
     } catch(e){
       res.status(500).json({error:e.message})
     }
@@ -97,13 +97,13 @@ const getAllBooks = async(req, res) => {
     try{
       await BookModel.update({
         userId:null,
-        is_avaliable:true
+        is_available:true
       },{
         where: {
           id: req.body.book_id
         }
       });
-      res.send('Book returned successfully');
+      res.status(200).json({"message":'Book returned successfully'});
     } catch(e){
       res.status(500).json({error:e.message})
     }
