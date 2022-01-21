@@ -115,6 +115,22 @@ router.post('/login', adminMiddleware.validateAdminLogin,  adminController.login
  */
 router.post('/update', tokenMiddleware.verifyToken, adminMiddleware.validateAdminUpdate, adminMiddleware.validateAdminEmail, adminMiddleware.validateAdminExistance, adminController.update);
 
+/**
+ * @swagger
+ * /logout:
+ *   post:
+ *     summary: Logout an admin
+ *     tags: [Admins]
+ *     responses:
+ *       200:
+ *         description: Admin successfully logged out
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Admin'
+ */
 router.post('/logout',  tokenMiddleware.verifyToken,  adminController.logout);
 
 

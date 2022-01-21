@@ -213,6 +213,24 @@ router.post('/update', tokenMiddleware.verifyToken, userMiddleware.validateUserU
 
 router.get('/getAll', tokenMiddleware.verifyToken, adminMiddleware.checkAdmin,  userMiddleware.validateLibraryExistance, adminMiddleware.checkAdminBelongsToLibrary, userController.getAllUsers);
 router.get('/getOne/:user_id',  tokenMiddleware.verifyToken, adminMiddleware.checkAdmin, userController.getUser);
+
+/**
+ * @swagger
+ * /logout:
+ *   post:
+ *     summary: Logout a user
+ *     tags: [Users]
+ *     responses:
+ *       200:
+ *         description: User successfully logged out
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/User'
+ */
+
 router.post('/logout',  tokenMiddleware.verifyToken,  userController.logout);
 
 module.exports = router
