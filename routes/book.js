@@ -37,10 +37,10 @@ const bookController = require('../controllers/Book');
  *         is_available:
  *           type: boolean
  *           description: The availability of book
- *         user_id:
+ *         userId:
  *           type: integer
  *           description: The user id of book
- *         library_id:
+ *         libraryId:
  *           type: integer
  *           description: The library id of book
  *       example:
