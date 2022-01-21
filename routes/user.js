@@ -5,11 +5,163 @@ var tokenMiddleware = require('../middlewares/token');
 var adminMiddleware = require('../middlewares/admin');
 const userController = require('../controllers/User');
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       required:
+ *         - full_name
+ *         - email
+ *         - password
+ *       properties:
+ *         id:
+ *           type: string
+ *           description: The auto-generated id of the user
+ *         full_name:
+ *           type: string
+ *           description: The full_name of user
+ *         email:
+ *           type: string
+ *           description: The email of user
+ *         password:
+ *           type: string
+ *           description: The password of user
+ *       example:
+ *         id: 22
+ *         full_name: Ahmad
+ *         email: ahmad.hasnain@invozone.com
+ *         password: 12%vsg3wyO*754$sad
+ */
 
+ /**
+  * @swagger
+  * tags:
+  *   name: Users
+  *   description: The users managing API
+  */
+
+ /**
+ * @swagger
+ * /login:
+ *   post:
+ *     summary: Login a user
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: email
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The user email
+ *         name: password
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The user password 
+ *     responses:
+ *       200:
+ *         description: The user description
+ *         contents:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       
+ */
 router.post('/login', userMiddleware.validateUserLogin, userController.login);
-router.post('/add', tokenMiddleware.verifyToken, userMiddleware.validateUserCreate, adminMiddleware.checkAdmin, userMiddleware.validateLibraryExistance, adminMiddleware.checkAdminBelongsToLibrary, userMiddleware.validateUserEmail, userController.createUser);
+
+/**
+ * @swagger
+ * /create:
+ *   post:
+ *     summary: Create a user
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: full_name
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The user first name
+ *         name: email
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The user email
+ *         name: password
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The user password 
+ *         name: library_id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: The library id in which user will be added
+ *     responses:
+ *       201:
+ *         description: The newly created user description
+ *         contents:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       400:
+ *         description: The user is already added
+ */
+router.post('/add', tokenMiddleware.verifyToken, userMiddleware.validateUserCreate, adminMiddleware.checkAdmin, userMiddleware.validateLibraryExistance, adminMiddleware.checkAdminBelongsToLibrary, userController.createUser);
+
+/**
+ * @swagger
+ * /remove:
+ *   post:
+ *     summary: Delete the user by id
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: The user id
+ *         name: library_id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: The library id from which user will be removed
+ *     responses:
+ *       200:
+ *         description: The user is removed successfully from library
+ *         contents:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       404:
+ *         description: The user was not found
+ */
 router.post('/remove', tokenMiddleware.verifyToken, userMiddleware.validateUserDelete, adminMiddleware.checkAdmin, userMiddleware.validateUserExistance, userMiddleware.validateLibraryExistance, adminMiddleware.checkAdminBelongsToLibrary, userController.deleteUser);
-router.post('/update', tokenMiddleware.verifyToken, userMiddleware.validateUserUpdate, adminMiddleware.checkAdmin, userMiddleware.validateUserExistance, userMiddleware.validateLibraryExistance, adminMiddleware.checkAdminBelongsToLibrary, userController.updateUser);
+
+
+router.post('/update', tokenMiddleware.verifyToken, userMiddleware.validateUserUpdate, userMiddleware.validateUserExistance, userMiddleware.validateLibraryExistance, userController.updateUser);
+
+
+/**
+ * @swagger
+ * /getAll:
+ *   get:
+ *     summary: Returns the list of all the users
+ *     tags: [Users]
+ *     responses:
+ *       200:
+ *         description: The list of the users
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/User'
+ */
+
 router.get('/getAll', tokenMiddleware.verifyToken, adminMiddleware.checkAdmin, userController.getAllUsers);
 router.get('/getOne/:user_id',  tokenMiddleware.verifyToken, adminMiddleware.checkAdmin, userController.getUser);
 

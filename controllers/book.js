@@ -79,7 +79,10 @@ const getAllBooks = async(req, res) => {
 
   const borrowBook = async(req, res) => {
     try{
-      BookModel.update({userId:req.user.id},{
+      BookModel.update({
+        userId:req.user.id,
+        is_avaliable:false
+      },{
         where: {
           id: req.body.book_id
         }
@@ -92,7 +95,10 @@ const getAllBooks = async(req, res) => {
 
   const returnBook = async(req, res) => {
     try{
-      BookModel.update({userId:null},{
+      BookModel.update({
+        userId:null,
+        is_avaliable:true
+      },{
         where: {
           id: req.body.book_id
         }

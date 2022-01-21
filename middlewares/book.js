@@ -153,9 +153,9 @@ const validateBookCreate = (req, res, next) => {
         return res.status(400).json( { error: "Book already exists in this library." });
       }
       next();
-  } catch(e){
-      res.status(500).json({error:e.message})
-  }
+    } catch(e){
+        res.status(500).json({error:e.message})
+    }
   }
 
 

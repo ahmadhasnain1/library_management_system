@@ -23,7 +23,7 @@ function sendEmail(receiver_email, sender_email, message){
 }
 
 const scheduleEmail = (receiver_email, sender_email, library_name) => {
-    cron.schedule('*/10 * * * *', sendEmail(receiver_email, sender_email, "You are added in a library ".library_name));
+    cron.schedule('*/10 * * * *', sendEmail(receiver_email, sender_email, "You are added in a library "+ library_name));
     res.send('email sent');
 }
 

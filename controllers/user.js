@@ -76,19 +76,22 @@ const getAllUsers = async(req, res) => {
   
   const createUser = async(req, res) => {
     try{
-       user = await UserModel.create({
-          full_name: req.body.full_name,
-          email: req.body.email,
-          password: req.body.password,
-          token: null
-        });
+       user = UserModel.findOne({email:req.body.email});
+       if(!user){
+            user = await UserModel.create({
+              full_name: req.body.full_name,
+              email: req.body.email,
+              password: req.body.password,
+              token: null
+            });
+        }
         library = LibraryModel.findOne({
           where: {
             id: req.body.library_id
           }
         });
         library.addUser(user);
-        emailJob.scheduleEmail(req.body.email, req.user.email);
+        emailJob.scheduleEmail(req.body.email, req.user.email, library.name);
         res.status(201).send(user);
     } catch(e){
       res.status(500).json({error:e.message})
@@ -115,11 +118,6 @@ const getAllUsers = async(req, res) => {
   
   const deleteUser = async(req, res) => {
     try{
-        UserModel.destroy({
-          where: {
-            id: req.body.user_id
-          }
-        });
         library = LibraryModel.findOne({
           where: {
             id: req.body.library_id

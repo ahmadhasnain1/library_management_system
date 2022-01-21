@@ -94,19 +94,19 @@ const validateUserCreate = (req, res, next) => {
     }
   }
 
-  const validateUserEmail = (req, res, next) => {
-    try{
-        if(req.body.email!=null){
-            let user = UserModel.findOne({email:req.body.email});
-            if(user){
-                return res.status(400).json( { error: "User with that email already exists" });
-            }
-        }
-        next();
-    } catch(e){
-        res.status(500).json({error:e.message})
-    }
-  }
+  // const validateUserEmail = (req, res, next) => {
+  //   try{
+  //       if(req.body.email!=null){
+  //           let user = UserModel.findOne({email:req.body.email});
+  //           if(user){
+  //               return res.status(400).json( { error: "User with that email already exists" });
+  //           }
+  //       }
+  //       next();
+  //   } catch(e){
+  //       res.status(500).json({error:e.message})
+  //   }
+  // }
 
   const validateLibraryExistance = (req, res, next) => {
     try{
@@ -151,7 +151,7 @@ const validateUserCreate = (req, res, next) => {
       validateUserUpdate,
       validateUserDelete,
       validateUserLogin,
-      validateUserEmail,
+      // validateUserEmail,
       validateUserExistance,
       validateLibraryExistance,
       validateUserGetAll,
