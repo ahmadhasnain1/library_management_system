@@ -17,7 +17,7 @@ const login = async(req, res) => {
        });
     if (user && await(bcrypt.compareSync(req.body.password, user.password))) {  // check user found and verify password
           const token = jwt.sign(   // authentication successful
-            { user: user.id, email },
+            { id: user.id, email },
             process.env.TOKEN_KEY,
             {
               expiresIn: "2h",

@@ -15,7 +15,7 @@ const login = async(req, res) => {
         });
         if (admin && await(bcrypt.compareSync(req.body.password, admin.password))) {   // check admin found and verify password
             const token = jwt.sign(    // authentication successful
-                { admin_id: admin.id, email },
+                { id: admin.id, email },
                 process.env.TOKEN_KEY,
                 {
                   expiresIn: "2h",

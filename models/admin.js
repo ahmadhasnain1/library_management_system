@@ -22,11 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-          is: ["^[a-z]+$",'i'],
-          isAlpha: {
-            args:true,
-            msg: "Fullname only contain alphabets"
-          },
+          is: ["^[a-zA-Z ]*$",'i'],
           notNull: true,
           notEmpty: true,
           min: 2,

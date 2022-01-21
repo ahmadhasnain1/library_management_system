@@ -22,9 +22,10 @@ const validateAdminLogin = (req, res, next) => {
   const validateAdminUpdate = (req, res, next) => {
     try{
         const schema = Joi.object().keys({
-          full_name: Joi.string().regex(/^[a-zA-Z]+$/).min(3).max(30).optional(),
+          full_name: Joi.string().regex(/^[a-zA-Z ]*$/).min(3).max(30).optional(),
           email: Joi.string().email().optional(),
-          password: Joi.string().min(5).max(30).optional()
+          password: Joi.string().min(5).max(30).optional(),
+          admin_id: Joi.number().required()
         });
         const result = schema.validate(req.body); 
         if(result.error == null)  //means valid

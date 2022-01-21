@@ -4,8 +4,9 @@ const config = process.env;
 
 const verifyToken = (req, res, next) => {
   try{
+      console.log(req.headers.token);
       const token =
-        req.body.token || req.query.token || req.headers["x-access-token"];
+        req.body.token || req.query.token || req.headers.token;
 
       if (!token) {
         return res.status(403).send("A token is required for authentication");
@@ -13,6 +14,7 @@ const verifyToken = (req, res, next) => {
       try {
         const decoded = jwt.verify(token, config.TOKEN_KEY);
         req.user = decoded;
+        console.log('decoded user is: ' ,req.user);
       } catch (err) {
         return res.status(401).send("Invalid Token");
       }

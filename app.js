@@ -24,7 +24,7 @@ const options = {
 	apis: ["./routes/*.js"],
 };
 
-const specs = swaggerJsDoc(options);
+// const specs = swaggerJsDoc(options);
 
 const app = express();
 const port = process.env.PORT;
@@ -32,7 +32,7 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
+// app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
 
 app.get('/', (req, res) => {
 	res.send('Hello World!')

@@ -5,11 +5,11 @@ const BookModel = require('../models').Book ;
 const validateBookCreate = (req, res, next) => {
     try{
         const schema = Joi.object().keys({
-          name: Joi.string().regex(/^[a-zA-Z]+$/).min(3).max(30).required(),
+          name: Joi.string().regex(/^[a-zA-Z ]*$/).min(3).max(30).required(),
           author: Joi.string().email().required(),
           description: Joi.string().min(2).max(255).optional(),
           publishing_date: Joi.date().optional(),
-          library_id: Joi.integer().required()
+          library_id: Joi.number().required()
         });
         const result = schema.validate(req.body); 
         if(result.error == null)  //means valid
@@ -26,11 +26,12 @@ const validateBookCreate = (req, res, next) => {
   const validateBookUpdate = (req, res, next) => {
     try{
         const schema = Joi.object().keys({
-          name: Joi.string().regex(/^[a-zA-Z]+$/).min(3).max(30).optional(),
+          name: Joi.string().regex(/^[a-zA-Z ]*$/).min(3).max(30).optional(),
           author: Joi.string().email().optional(),
           description: Joi.string().min(2).max(255).optional(),
           publishing_date: Joi.date().optional(),
-          library_id: Joi.integer().required()
+          book_id: Joi.number().required(),
+          library_id: Joi.number().required()
         });
         const result = schema.validate(req.body); 
         if(result.error == null)  //means valid
@@ -47,8 +48,8 @@ const validateBookCreate = (req, res, next) => {
   const validateBookDelete = (req, res, next) => {
     try{
         const schema = Joi.object().keys({
-          book_id: Joi.integer().required(),
-          library_id: Joi.integer().required()
+          book_id: Joi.number().required(),
+          library_id: Joi.number().required()
         });
         const result = schema.validate(req.body); 
         if(result.error == null)  //means valid
@@ -65,7 +66,7 @@ const validateBookCreate = (req, res, next) => {
   const validateBookGetAll = (req, res, next) => {
     try{
         const schema = Joi.object().keys({
-          library_id: Joi.integer().required()
+          library_id: Joi.number().required()
         });
         const result = schema.validate(req.body); 
         if(result.error == null)  //means valid
@@ -82,9 +83,9 @@ const validateBookCreate = (req, res, next) => {
   const validateBookBorrow = (req, res, next) => {
     try{
         const schema = Joi.object().keys({
-          book_id: Joi.integer().required(),
-          library_id: Joi.integer().required(),
-          user_id: Joi.integer().required()
+          book_id: Joi.number().required(),
+          library_id: Joi.number().required(),
+          user_id: Joi.number().required()
         });
         const result = schema.validate(req.body); 
         if(result.error == null)  //means valid
@@ -101,9 +102,9 @@ const validateBookCreate = (req, res, next) => {
   const validateBookReturn = (req, res, next) => {
     try{
         const schema = Joi.object().keys({
-          book_id: Joi.integer().required(),
-          library_id: Joi.integer().required(),
-          user_id: Joi.integer().required()
+          book_id: Joi.number().required(),
+          library_id: Joi.number().required(),
+          user_id: Joi.number().required()
         });
         const result = schema.validate(req.body); 
         if(result.error == null)  //means valid

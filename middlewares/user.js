@@ -23,10 +23,10 @@ const validateUserLogin = (req, res, next) => {
 const validateUserCreate = (req, res, next) => {
     try{
         const schema = Joi.object().keys({
-          full_name: Joi.string().regex(/^[a-zA-Z]+$/).min(3).max(30).required(),
+          full_name: Joi.string().regex(/^[a-zA-Z ]*$/).min(3).max(30).required(),
           email: Joi.string().email().required(),
           password: Joi.string().min(5).max(30).required(),
-          library_id: Joi.integer().required()
+          library_id: Joi.number().required()
         });
         const result = schema.validate(req.body); 
         if(result.error == null)  //means valid
@@ -43,10 +43,11 @@ const validateUserCreate = (req, res, next) => {
   const validateUserUpdate = (req, res, next) => {
     try{
         const schema = Joi.object().keys({
-          full_name: Joi.string().regex(/^[a-zA-Z]+$/).min(3).max(30).optional(),
+          full_name: Joi.string().regex(/^[a-zA-Z ]*$/).min(3).max(30).optional(),
           email: Joi.string().email().optional(),
           password: Joi.string().min(5).max(30).optional(),
-          library_id: Joi.integer().required()
+          user_id: Joi.number().required(),
+          library_id: Joi.number().required()
         });
         const result = schema.validate(req.body); 
         if(result.error == null)  //means valid
@@ -63,8 +64,8 @@ const validateUserCreate = (req, res, next) => {
   const validateUserDelete = (req, res, next) => {
     try{
         const schema = Joi.object().keys({
-          user_id: Joi.integer().required(),
-          library_id: Joi.integer().required()
+          user_id: Joi.number().required(),
+          library_id: Joi.number().required()
         });
         const result = schema.validate(req.body); 
         if(result.error == null)  //means valid
@@ -81,7 +82,7 @@ const validateUserCreate = (req, res, next) => {
   const validateUserGetAll = (req, res, next) => {
     try{
         const schema = Joi.object().keys({
-          library_id: Joi.integer().required()
+          library_id: Joi.number().required()
         });
         const result = schema.validate(req.body); 
         if(result.error == null)  //means valid
