@@ -52,7 +52,14 @@ const validateAdminLogin = (req, res, next) => {
 
   const checkAdmin = (req, res, next) => {
     try{
-      let admin = AdminModel.findOne({id:req.user.id});
+      let admin = AdminModel.findOne({
+        where:{
+          [Op.and]: [
+            { id: req.user.id },
+            { email: req.user.email },
+          ]
+        }      
+      });
       if(admin)
         return next()
       return res.status(403).json( { error: "You donot have permission." });

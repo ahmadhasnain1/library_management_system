@@ -17,7 +17,7 @@ const adminController = require('../controllers/Admin');
  *         - libraryId
  *       properties:
  *         id:
- *           type: string
+ *           type: integer
  *           description: The auto-generated id of the admin
  *         full_name:
  *           type: string
@@ -28,6 +28,9 @@ const adminController = require('../controllers/Admin');
  *         password:
  *           type: string
  *           description: The password of admin
+ *         libraryId:
+ *           type: integer
+ *           description: The id of library of admin
  *       example:
  *         id: 2
  *         full_name: Saud Saleem
@@ -74,7 +77,7 @@ router.post('/login', adminMiddleware.validateAdminLogin,  adminController.login
 
 /**
  * @swagger
- * /create:
+ * /update:
  *   post:
  *     summary: Update an admin
  *     tags: [Admins]

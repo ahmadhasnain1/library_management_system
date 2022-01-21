@@ -17,7 +17,7 @@ const userController = require('../controllers/User');
  *         - password
  *       properties:
  *         id:
- *           type: string
+ *           type: integer
  *           description: The auto-generated id of the user
  *         full_name:
  *           type: string
@@ -73,9 +73,9 @@ router.post('/login', userMiddleware.validateUserLogin, userController.login);
 
 /**
  * @swagger
- * /create:
+ * /add:
  *   post:
- *     summary: Create a user
+ *     summary: Add a user
  *     tags: [Users]
  *     parameters:
  *       - in: path
@@ -101,7 +101,7 @@ router.post('/login', userMiddleware.validateUserLogin, userController.login);
  *         description: The library id in which user will be added
  *     responses:
  *       201:
- *         description: The newly created user description
+ *         description: The newly added user description
  *         contents:
  *           application/json:
  *             schema:
@@ -119,7 +119,7 @@ router.post('/add', tokenMiddleware.verifyToken, userMiddleware.validateUserCrea
  *     tags: [Users]
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: user_id
  *         schema:
  *           type: integer
  *         required: true
@@ -164,6 +164,11 @@ router.post('/remove', tokenMiddleware.verifyToken, userMiddleware.validateUserD
  *           type: string
  *         required: true
  *         description: The user password 
+ *         name: user_id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: The id of user that will be updated
  *         name: library_id
  *         schema:
  *           type: integer
@@ -185,9 +190,16 @@ router.post('/update', tokenMiddleware.verifyToken, userMiddleware.validateUserU
 /**
  * @swagger
  * /getAll:
- *   get:
- *     summary: Returns the list of all the users
+ *   post:
+ *     summary: Returns the list of all the users of a library
  *     tags: [Users]
+ *      parameters:
+ *       - in: path
+ *         name: library_id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: The library id from which the users will be returned
  *     responses:
  *       200:
  *         description: The list of the users
@@ -199,7 +211,7 @@ router.post('/update', tokenMiddleware.verifyToken, userMiddleware.validateUserU
  *                 $ref: '#/components/schemas/User'
  */
 
-router.get('/getAll', tokenMiddleware.verifyToken, adminMiddleware.checkAdmin, userController.getAllUsers);
+router.get('/getAll', tokenMiddleware.verifyToken, adminMiddleware.checkAdmin,  userMiddleware.validateLibraryExistance, adminMiddleware.checkAdminBelongsToLibrary, userController.getAllUsers);
 router.get('/getOne/:user_id',  tokenMiddleware.verifyToken, adminMiddleware.checkAdmin, userController.getUser);
 
 module.exports = router

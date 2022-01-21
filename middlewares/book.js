@@ -132,7 +132,7 @@ const validateBookCreate = (req, res, next) => {
             req.book = book;
             return next();
         }
-        return res.status(400).json( { error: "Book does not exist with that id." });
+        return res.status(404).json( { error: "Book does not exist with that id." });
     } catch(e){
         res.status(500).json({error:e.message})
     }

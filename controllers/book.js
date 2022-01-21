@@ -39,7 +39,7 @@ const getAllBooks = async(req, res) => {
           userId: null,
           is_available: true
         })
-        res.status(201).send(book);
+        res.status(201).json({book:book});
     } catch(e){
       res.status(500).json({error:e.message})
     }

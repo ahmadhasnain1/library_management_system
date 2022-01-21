@@ -118,6 +118,7 @@ const getAllUsers = async(req, res) => {
   
   const deleteUser = async(req, res) => {
     try{
+        user = UserModel.findOne({id:req.body.user_id});
         library = LibraryModel.findOne({
           where: {
             id: req.body.library_id

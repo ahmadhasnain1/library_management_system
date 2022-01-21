@@ -128,7 +128,7 @@ const validateUserCreate = (req, res, next) => {
         if(user){
             return next();
         }
-        return res.status(400).json( { error: "User does not exist with that id." });
+        return res.status(404).json( { error: "User does not exist with that id." });
     } catch(e){
         res.status(500).json({error:e.message})
     }
