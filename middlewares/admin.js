@@ -1,5 +1,7 @@
 const Joi = require('joi');
 const AdminModel = require('../models').Admin ;
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 const validateAdminLogin = (req, res, next) => {
     try{
@@ -41,7 +43,7 @@ const validateAdminLogin = (req, res, next) => {
 
   const validateAdminExistance = (req, res, next) => {
     try{
-        let admin = AdminModel.findOne({id:req.body.admin_id});
+        let admin = AdminModel.findOne({where:{id:req.body.admin_id}});
         if(admin && req.user.id==req.body.admin_id){
             return next();
         }
@@ -51,9 +53,9 @@ const validateAdminLogin = (req, res, next) => {
     }
   }
 
-  const checkAdmin = (req, res, next) => {
+  const checkAdmin = async(req, res, next) => {
     try{
-      let admin = AdminModel.findOne({
+      let admin = await AdminModel.findOne({
         where:{
           [Op.and]: [
             { id: req.user.id },
@@ -61,8 +63,10 @@ const validateAdminLogin = (req, res, next) => {
           ]
         }      
       });
-      if(admin)
+      if(admin){
+        req.admin=admin;
         return next()
+      }
       return res.status(403).json( { error: "You donot have permission." });
     } catch(e){
         res.status(500).json({error:e.message})
@@ -71,17 +75,17 @@ const validateAdminLogin = (req, res, next) => {
 
   const checkAdminBelongsToLibrary = (req, res, next) => {
     try{
-        if(req.user.library_id==req.library_id)
+        if(req.admin.libraryId==req.body.library_id)
           return next()
         return res.status(403).json( { error: "You donot have permission." });
       } catch(e){
           res.status(500).json({error:e.message})
       }
   }
-  const validateAdminEmail = (req, res, next) => {
+  const validateAdminEmail = async(req, res, next) => {
     try{
         if(req.body.email!=null){
-            let admin = AdminModel.findOne({email:req.body.email});
+            let admin = await AdminModel.findOne({where:{email:req.body.email}});
             if(admin){
                 return res.status(400).json( { error: "Admin with that email already exists" });
             }

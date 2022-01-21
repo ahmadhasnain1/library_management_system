@@ -1,12 +1,14 @@
 const Joi = require('joi');
 const BookModel = require('../models').Book ;
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 
 const validateBookCreate = (req, res, next) => {
     try{
         const schema = Joi.object().keys({
           name: Joi.string().regex(/^[a-zA-Z ]*$/).min(3).max(30).required(),
-          author: Joi.string().email().required(),
+          author: Joi.string().regex(/^[a-zA-Z ]*$/).min(3).max(30).required(),
           description: Joi.string().min(2).max(255).optional(),
           publishing_date: Joi.date().optional(),
           library_id: Joi.number().required()
@@ -119,13 +121,13 @@ const validateBookCreate = (req, res, next) => {
   }
 
 
- const validateBookExistance = (req, res, next) => {
+ const validateBookExistance = async(req, res, next) => {
     try{
-        let book = BookModel.findOne({
+        let book = await BookModel.findOne({
           where:{
             [Op.and]: [
-              {libraryId: req.body.library_id },
-              {id:req.body.book_id}
+              {id:req.body.book_id},
+              {libraryId: req.body.library_id }
             ]
           }
         });
@@ -133,15 +135,16 @@ const validateBookCreate = (req, res, next) => {
             req.book = book;
             return next();
         }
+        console.log("validateBookExistance");
         return res.status(404).json( { error: "Book does not exist with that id." });
     } catch(e){
         res.status(500).json({error:e.message})
     }
   }
 
-  const checkBookExistanceInLibrary = (req, res, next) => {
+  const checkBookExistanceInLibrary = async(req, res, next) => {
     try{
-      let book = BookModel.findOne({
+      let book = await BookModel.findOne({
         where: {
           [Op.and]: [
             { libraryId: req.body.library_id },
@@ -150,6 +153,7 @@ const validateBookCreate = (req, res, next) => {
           ]
         }
       });
+      console.log(book);
       if(book){
         return res.status(400).json( { error: "Book already exists in this library." });
       }

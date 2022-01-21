@@ -211,7 +211,7 @@ router.post('/update', tokenMiddleware.verifyToken, userMiddleware.validateUserU
  *                 $ref: '#/components/schemas/User'
  */
 
-router.get('/getAll', tokenMiddleware.verifyToken, adminMiddleware.checkAdmin,  userMiddleware.validateLibraryExistance, adminMiddleware.checkAdminBelongsToLibrary, userController.getAllUsers);
+router.post('/getAll', tokenMiddleware.verifyToken, userMiddleware.validateUserGetAll, adminMiddleware.checkAdmin,  userMiddleware.validateLibraryExistance, adminMiddleware.checkAdminBelongsToLibrary, userController.getAllUsers);
 router.get('/getOne/:user_id',  tokenMiddleware.verifyToken, adminMiddleware.checkAdmin, userController.getUser);
 
 /**

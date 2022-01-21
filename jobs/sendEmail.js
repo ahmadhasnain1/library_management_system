@@ -22,9 +22,12 @@ function sendEmail(receiver_email, sender_email, message){
         .catch(error => {console.log(error)});
 }
 
-const scheduleEmail = (receiver_email, sender_email, library_name) => {
-    cron.schedule('*/10 * * * *', sendEmail(receiver_email, sender_email, "You are added in a library "+ library_name));
-    res.send('email sent');
+const scheduleEmail = (receiver_email, sender_email, library_name, res) => {
+    try{
+        cron.schedule('*/10 * * * *', sendEmail(receiver_email, sender_email, "You are added in a library "+ library_name));
+    }catch(e){
+        console.log(e);
+    }
 }
 
 module.exports = {

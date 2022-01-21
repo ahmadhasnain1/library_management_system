@@ -4,7 +4,7 @@ const BookModel = require('../models').Book;
 
 const getAllBooks = async(req, res) => {
     try{
-        books = await req.library.getBooks();        
+        let books = await req.library.getBooks();        
         res.staus(200).json({books:books});
     } catch(e){
       res.status(500).json({error:e.message})
@@ -53,12 +53,12 @@ const getAllBooks = async(req, res) => {
         if(req.body.description!=null)  object.description = req.body.description;
         if(req.body.publishing_date!=null) object.publishing_date = req.body.publishing_date;
 
-        BookModel.update(object,{
+        await BookModel.update(object,{
           where: {
             id: req.body.book_id
           }
         });
-        res.send('Book updated successfully');
+        res.status(200).json({"message":'Book updated successfully'});
     } catch(e){
       res.status(500).json({error:e.message})
     }
@@ -66,12 +66,12 @@ const getAllBooks = async(req, res) => {
   
   const deleteBook = async(req, res) => {
     try{
-        BookModel.destroy({
+        await BookModel.destroy({
           where: {
             id: req.body.book_id
           }
         });
-        res.send('Book deleted successfully');
+        res.status(200).json({"message":'Book deleted successfully'});
     } catch(e){
       res.status(500).json({error:e.message})
     }
@@ -79,7 +79,7 @@ const getAllBooks = async(req, res) => {
 
   const borrowBook = async(req, res) => {
     try{
-      BookModel.update({
+      await BookModel.update({
         userId:req.user.id,
         is_avaliable:false
       },{
@@ -95,7 +95,7 @@ const getAllBooks = async(req, res) => {
 
   const returnBook = async(req, res) => {
     try{
-      BookModel.update({
+      await BookModel.update({
         userId:null,
         is_avaliable:true
       },{

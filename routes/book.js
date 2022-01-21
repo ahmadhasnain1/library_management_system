@@ -182,7 +182,7 @@ router.post('/remove', tokenMiddleware.verifyToken, bookMiddleware.validateBookD
  *               $ref: '#/components/schemas/Book'
  *       
  */
-router.post('/update', tokenMiddleware.verifyToken, bookMiddleware.validateBookUpdate, userMiddleware.validateLibraryExistance, bookMiddleware.validateBookExistance, adminMiddleware.checkAdmin, adminMiddleware.checkAdminBelongsToLibrary, bookMiddleware.checkBookExistanceInLibrary, bookController.updateBook);
+router.post('/update', tokenMiddleware.verifyToken, bookMiddleware.validateBookUpdate, userMiddleware.validateLibraryExistance, bookMiddleware.validateBookExistance, adminMiddleware.checkAdmin, adminMiddleware.checkAdminBelongsToLibrary, bookController.updateBook);
 
 /**
  * @swagger
@@ -207,7 +207,7 @@ router.post('/update', tokenMiddleware.verifyToken, bookMiddleware.validateBookU
  *               items:
  *                 $ref: '#/components/schemas/Book'
  */
-router.post('/getAll', tokenMiddleware.verifyToken, userMiddleware.validateLibraryExistance, bookController.getAllBooks);
+router.post('/getAll', tokenMiddleware.verifyToken, bookMiddleware.validateBookGetAll, userMiddleware.validateLibraryExistance, bookController.getAllBooks);
 router.get('/getOne/:book_id', tokenMiddleware.verifyToken, bookController.getBook);
 
 /**

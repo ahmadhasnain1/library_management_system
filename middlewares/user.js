@@ -96,10 +96,10 @@ const validateUserCreate = (req, res, next) => {
     }
   }
 
-  const validateUserEmail = (req, res, next) => {
+  const validateUserEmail = async(req, res, next) => {
     try{
         if(req.body.email!=null){
-            let user = UserModel.findOne({email:req.body.email});
+            let user = await UserModel.findOne({where:{email:req.body.email}});
             if(user){
                 return res.status(400).json( { error: "User with that email already exists" });
             }
@@ -110,9 +110,9 @@ const validateUserCreate = (req, res, next) => {
     }
   }
 
-  const validateLibraryExistance = (req, res, next) => {
+  const validateLibraryExistance = async(req, res, next) => {
     try{
-        let library = LibraryModel.findOne({id:req.body.library_id});
+        let library = await LibraryModel.findOne({where:{id:req.body.library_id}});
         if(library){
             req.library = library;
             return next();
@@ -123,9 +123,9 @@ const validateUserCreate = (req, res, next) => {
     }
   }
 
-  const validateUserExistance = (req, res, next) => {
+  const validateUserExistance = async(req, res, next) => {
     try{
-        let user = UserModel.findOne({id:req.body.user_id});
+        let user = await UserModel.findOne({where:{id:req.body.user_id}});
         if(user){
             return next();
         }
@@ -135,12 +135,10 @@ const validateUserCreate = (req, res, next) => {
     }
   }
 
-  const checkUserBelongsToLibrary = (req, res, next) => {
+  const checkUserBelongsToLibrary = async(req, res, next) => {
     try{
-      user = req.library.getUsers({where:{
-        id:req.body.user_id
-      }});
-      if(user)
+      let user = await UserModel.findOne({where:{id:req.user.id}});
+      if(await req.library.hasUser(user))
         return next()
       return res.status(400).json( { error: "User does not belongs to library." });
     } catch(e){

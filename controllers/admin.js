@@ -38,8 +38,10 @@ const logout = async(req, res) => {
   try{
     const token =
     req.body.token || req.query.token || req.headers["x-access-token"];
-    const admin = await AdminModel.findOne({ token });
-    admin.token = null;
+    const admin = await AdminModel.findOne({ where:{id:req.user.id} });
+    admin.update({
+      token: null
+    });
     res.status(200).json({"message":"logged out successfully."});
   } catch(e){
     res.status(500).json({error:e.message})
@@ -53,8 +55,7 @@ const update = async(req, res) => {
       if(req.body.full_name!=null)  object.full_name = req.body.full_name;
       if(req.body.email!=null)  object.email = req.body.email;
       if(req.body.password!=null)  object.password = req.body.password;
-      console.log(object);
-      AdminModel.update(object,{
+      await AdminModel.update(object,{
         where: {
           id: req.body.admin_id
         }

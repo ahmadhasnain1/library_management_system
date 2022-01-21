@@ -40,8 +40,11 @@ const logout = async(req, res) => {
   try{
     const token =
     req.body.token || req.query.token || req.headers["x-access-token"];
-    const user = await UserModel.findOne({ token });
+    const user = await UserModel.findOne({ where:{id:req.user.id} });
     user.token = null;
+    user.update({
+      token: null
+    });
     res.status(200).json({"message":"logged out successfully."});
   } catch(e){
     res.status(500).json({error:e.message})
@@ -50,7 +53,7 @@ const logout = async(req, res) => {
 
 const getAllUsers = async(req, res) => {
     try{
-        let users = req.library.getUsers();        
+        let users = await req.library.getUsers();        
         res.status(200).json({users:users});
     } catch(e){
       res.status(500).json({error:e.message})
@@ -76,7 +79,7 @@ const getAllUsers = async(req, res) => {
   
   const createUser = async(req, res) => {
     try{
-       user = UserModel.findOne({email:req.body.email});
+       let user = await UserModel.findOne({where:{email:req.body.email}});
        if(!user){
             user = await UserModel.create({
               full_name: req.body.full_name,
@@ -85,14 +88,14 @@ const getAllUsers = async(req, res) => {
               token: null
             });
         }
-        library = LibraryModel.findOne({
+        library = await LibraryModel.findOne({
           where: {
             id: req.body.library_id
           }
         });
-        library.addUser(user);
-        emailJob.scheduleEmail(req.body.email, req.user.email, library.name);
-        res.status(201).send(user);
+        await library.addUser(user);
+        emailJob.scheduleEmail(req.body.email, req.user.email, library.name, res);
+        res.status(201).json({user:user});
     } catch(e){
       res.status(500).json({error:e.message})
     }
@@ -104,13 +107,12 @@ const getAllUsers = async(req, res) => {
         if(req.body.full_name!=null)  object.full_name = req.body.full_name;
         if(req.body.email!=null)  object.email = req.body.email;
         if(req.body.password!=null)  object.password = req.body.password;
-        console.log(object);
-        UserModel.update(object,{
+        await UserModel.update(object,{
           where: {
             id: req.body.user_id
           }
         });
-        res.send('User updated successfully');
+        res.status(200).json({"message":'User updated successfully'});
     } catch(e){
       res.status(500).json({error:e.message})
     }
@@ -118,8 +120,8 @@ const getAllUsers = async(req, res) => {
   
   const deleteUser = async(req, res) => {
     try{
-        user = UserModel.findOne({id:req.body.user_id});
-        library = LibraryModel.findOne({
+        let user = await UserModel.findOne({where:{id:req.body.user_id}});
+        library = await LibraryModel.findOne({
           where: {
             id: req.body.library_id
           }
