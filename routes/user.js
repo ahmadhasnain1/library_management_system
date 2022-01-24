@@ -44,7 +44,7 @@ const userController = require('../controllers/User');
 
  /**
  * @swagger
- * /login:
+ * /user/login:
  *   post:
  *     summary: Login a user
  *     tags: [Users]
@@ -73,7 +73,7 @@ router.post('/login', userMiddleware.validateUserLogin, userController.login);
 
 /**
  * @swagger
- * /add:
+ * /user/add:
  *   post:
  *     summary: Add a user
  *     tags: [Users]
@@ -113,7 +113,7 @@ router.post('/add', tokenMiddleware.verifyToken, userMiddleware.validateUserCrea
 
 /**
  * @swagger
- * /remove:
+ * /user/remove:
  *   post:
  *     summary: Delete the user by id
  *     tags: [Users]
@@ -143,7 +143,7 @@ router.post('/remove', tokenMiddleware.verifyToken, userMiddleware.validateUserD
 
 /**
  * @swagger
- * /create:
+ * /user/create:
  *   post:
  *     summary: Update a user
  *     tags: [Users]
@@ -189,7 +189,7 @@ router.post('/update', tokenMiddleware.verifyToken, userMiddleware.validateUserU
 
 /**
  * @swagger
- * /getAll:
+ * /user/getAll:
  *   post:
  *     summary: Returns the list of all the users of a library
  *     tags: [Users]
@@ -216,7 +216,7 @@ router.get('/getOne/:user_id',  tokenMiddleware.verifyToken, adminMiddleware.che
 
 /**
  * @swagger
- * /logout:
+ * /user/logout:
  *   post:
  *     summary: Logout a user
  *     tags: [Users]

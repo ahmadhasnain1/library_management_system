@@ -48,7 +48,7 @@ const adminController = require('../controllers/Admin');
 
  /**
  * @swagger
- * /login:
+ * /admin/login:
  *   post:
  *     summary: Login an admin
  *     tags: [Admins]
@@ -77,7 +77,7 @@ router.post('/login', adminMiddleware.validateAdminLogin,  adminController.login
 
 /**
  * @swagger
- * /update:
+ * /admin/update:
  *   post:
  *     summary: Update an admin
  *     tags: [Admins]
@@ -117,7 +117,7 @@ router.post('/update', tokenMiddleware.verifyToken, adminMiddleware.validateAdmi
 
 /**
  * @swagger
- * /logout:
+ * /admin/logout:
  *   post:
  *     summary: Logout an admin
  *     tags: [Admins]

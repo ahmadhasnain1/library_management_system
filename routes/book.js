@@ -63,7 +63,7 @@ const bookController = require('../controllers/Book');
 
  /**
  * @swagger
- * /add:
+ * /book/add:
  *   post:
  *     summary: Add a book in library
  *     tags: [Books]
@@ -107,7 +107,7 @@ router.post('/add', tokenMiddleware.verifyToken, bookMiddleware.validateBookCrea
 
 /**
  * @swagger
- * /remove:
+ * /book/remove:
  *   post:
  *     summary: Delete the book by id
  *     tags: [Books]
@@ -137,7 +137,7 @@ router.post('/remove', tokenMiddleware.verifyToken, bookMiddleware.validateBookD
 
 /**
  * @swagger
- * /update:
+ * /book/update:
  *   post:
  *     summary: Update a book in library
  *     tags: [Books]
@@ -186,7 +186,7 @@ router.post('/update', tokenMiddleware.verifyToken, bookMiddleware.validateBookU
 
 /**
  * @swagger
- * /getAll:
+ * /book/getAll:
  *   post:
  *     summary: Returns the list of all the books of a library
  *     tags: [Books]
@@ -212,7 +212,7 @@ router.get('/getOne/:book_id', tokenMiddleware.verifyToken, bookController.getBo
 
 /**
  * @swagger
- * /borrow:
+ * /book/borrow:
  *   post:
  *     summary: Borrow a book from a library
  *     tags: [Books]
@@ -247,7 +247,7 @@ router.post('/borrow', tokenMiddleware.verifyToken, bookMiddleware.validateBookB
 
 /**
  * @swagger
- * /return:
+ * /book/return:
  *   post:
  *     summary: Return a book to a library
  *     tags: [Books]
