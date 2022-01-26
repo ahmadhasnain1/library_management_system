@@ -6,7 +6,7 @@ const transporter = mailer.createTransport({
     service: 'gmail',
     auth: {
         user: 'ahmad.hasnain@invozone.com',
-        pass: 'psgehvnrxnnqidjv'
+        pass: ''
     }
 });
 
